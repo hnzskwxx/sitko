@@ -1,0 +1,36 @@
+# Render Blueprint pro OSTRÝ PROVOZ Sítka. Postup: docs/nasazeni.md
+# Dashboard → New → Blueprint → repozitář → do pole „Blueprint Path“ napište render-produkce.yaml.
+# Render se zeptá na hodnoty označené `sync: false`.
+#
+# Plán 0.5c-512mb (≈ 7 USD/měsíc) + disk 1 GB (≈ 0,25 USD/měsíc). Placený plán je nutný kvůli
+# trvalému disku: databáze a nahrané životopisy musí přežít restart. Bezplatný plán disk nemá.
+# Region Frankfurt = data v EU.
+services:
+  - type: web
+    name: sitko
+    runtime: docker
+    region: frankfurt
+    plan: 0.5c-512mb
+    numInstances: 1          # fronta běží v procesu, víc instancí nepodporujeme
+    healthCheckPath: /api/v1/health
+    disk:
+      name: sitko-data
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      # Klíč z platform.claude.com. Bez něj aplikace běží, ale nehodnotí.
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      # Kód, který musí zadat každá nová firma při registraci (chrání váš API klíč).
+      # Vymyslete si dlouhý náhodný řetězec a dávejte ho jen zákazníkům.
+      - key: REGISTRATION_CODE
+        sync: false
+      - key: ALLOW_REGISTRATION
+        value: "true"
+      - key: AI_MODEL
+        value: claude-sonnet-5-5
+      - key: MONTHLY_EVALUATION_LIMIT
+        value: "1000"
+      # Ukázková organizace na ostrém serveru vypnutá (zapnutá ji nabízí přihlašovací stránka komukoli).
+      - key: SEED_DEMO_ON_START
+        value: "false"

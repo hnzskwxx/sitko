@@ -1,0 +1,20 @@
+# Render Blueprint: BEZPLATNÁ UKÁZKA Sítka. Postup: docs/nasazeni.md
+# Dashboard → New → Blueprint → vyberte repozitář → Apply. Nic se neplatí.
+#
+# Bezplatný plán: bez trvalého disku, po 15 minutách nečinnosti se uspí, data se pak smažou
+# a po probuzení se ukázka připraví znovu. Žádný API klíč: ukázka skutečnou AI nevolá.
+# Ostrý provoz pro zákazníky: render-produkce.yaml.
+services:
+  - type: web
+    name: sitko-ukazka
+    runtime: docker
+    region: frankfurt
+    plan: free
+    healthCheckPath: /api/v1/health
+    envVars:
+      # Při startu připravit ukázkovou firmu; přihlašovací stránka nabídne tlačítko „Otevřít ukázku“
+      - key: SEED_DEMO_ON_START
+        value: "true"
+      # Na ukázce si nikdo nezakládá vlastní firmu
+      - key: ALLOW_REGISTRATION
+        value: "false"

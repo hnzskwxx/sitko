@@ -1,0 +1,85 @@
+/* Design tokeny Sítka. Popis a důvody v docs/design-system.md. Komponenty používají jen tyto proměnné. */
+:root {
+  --bg: #F7F7F5;
+  --surface: #FFFFFF;
+  --surface-2: #EFEFEC;
+  --surface-3: #E6E6E2;
+  --text: #191919;
+  --text-2: #6B6B67;
+  --text-3: #8E8E89;
+  --border: #E8E8E5;
+  --border-strong: #C9C9C4;
+  --primary: #252525;
+  --primary-hover: #000000;
+  --on-primary: #FFFFFF;
+  --success: #1F6E4B;
+  --success-bg: #E9F4EE;
+  --warning: #8F5E12;
+  --warning-icon: #B7791F;
+  --warning-bg: #FBF1E1;
+  --error: #B23B3B;
+  --error-solid: #C44747;
+  --error-bg: #FAEAEA;
+  --info: #2D5BD3;
+  --info-bg: #EAF0FC;
+  --focus: #2D5BD3;
+  --evidence: #FFE45C;
+  --evidence-ink: #191919;
+  --logo-bg: #191919;
+  --overlay: rgba(25, 25, 25, 0.32);
+  --shadow-md: 0 1px 2px rgba(25, 25, 25, 0.06), 0 4px 12px rgba(25, 25, 25, 0.08);
+  --shadow-lg: 0 2px 4px rgba(25, 25, 25, 0.06), 0 16px 40px rgba(25, 25, 25, 0.16);
+
+  --font: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --fs-xs: 12px; --lh-xs: 16px;
+  --fs-sm: 13px; --lh-sm: 18px;
+  --fs-md: 14px; --lh-md: 20px;
+  --fs-lg: 15px; --lh-lg: 22px;
+  --fs-xl: 20px; --lh-xl: 28px;
+  --fs-score: 32px;
+
+  --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 20px; --s-6: 24px; --s-8: 32px; --s-10: 40px; --s-12: 48px;
+  --r-control: 6px;
+  --r-panel: 8px;
+  --r-dialog: 10px;
+  --control-h: 32px;
+  --control-h-lg: 36px;
+  --sidebar-w: 232px;
+  --measure: 72ch;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #151515;
+    --surface: #1C1C1B;
+    --surface-2: #242423;
+    --surface-3: #2E2E2C;
+    --text: #EDEDEA;
+    --text-2: #A1A19C;
+    --text-3: #7C7C77;
+    --border: #2C2C2A;
+    --border-strong: #42423F;
+    --primary: #EDEDEA;
+    --primary-hover: #FFFFFF;
+    --on-primary: #151515;
+    --success: #7CC9A0;
+    --success-bg: #1E2B24;
+    --warning: #E3B464;
+    --warning-icon: #E3B464;
+    --warning-bg: #2E2616;
+    --error: #EE9A9A;
+    --error-solid: #C44747;
+    --error-bg: #311E1E;
+    --info: #7EA2FF;
+    --info-bg: #1D2436;
+    --focus: #7EA2FF;
+    --evidence: #E8C93A;
+    --evidence-ink: #151515;
+    --logo-bg: #2E2E2C;
+    --overlay: rgba(0, 0, 0, 0.56);
+    --shadow-md: 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 2px 4px rgba(0, 0, 0, 0.4), 0 16px 40px rgba(0, 0, 0, 0.5);
+    color-scheme: dark;
+  }
+}

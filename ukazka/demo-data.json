@@ -1,0 +1,601 @@
+{
+ "_info": "Předpřipravené výsledky ukázkové organizace (npm run seed:demo). Nejde o analýzu AI. Citace jsou doslovně z ukázkových CV.",
+ "suggestion": {
+  "position": "Obchodní referent/ka pro velkoobchod se zahradní technikou",
+  "requirements": [
+   {
+    "key": "praxe",
+    "name": "Praxe v obchodě nebo nákupu 2+ roky",
+    "description": "Aspoň 2 roky praxe na obchodní nebo nákupní pozici.",
+    "category": "zkusenosti",
+    "weight": 3,
+    "must_have": true,
+    "ad_quote": "praxe v obchodě nebo nákupu min. 2 roky (podmínka)"
+   },
+   {
+    "key": "ridic",
+    "name": "Řidičský průkaz sk. B",
+    "description": "Řidičský průkaz skupiny B, ideálně aktivní řízení.",
+    "category": "ostatni",
+    "weight": 3,
+    "must_have": true,
+    "ad_quote": "řidičský průkaz sk. B – aktivní řidič (podmínka)"
+   },
+   {
+    "key": "excel",
+    "name": "Pokročilý MS Excel",
+    "description": "Kontingenční tabulky, SVYHLEDAT nebo podobné funkce.",
+    "category": "dovednosti",
+    "weight": 2,
+    "must_have": false,
+    "ad_quote": "pokročilá znalost MS Excel (kontingenční tabulky, SVYHLEDAT)"
+   },
+   {
+    "key": "nemcina",
+    "name": "Němčina na komunikativní úrovni",
+    "description": "Němčina aspoň B1 nebo doložená pracovní komunikace v němčině.",
+    "category": "jazyky",
+    "weight": 2,
+    "must_have": false,
+    "ad_quote": "němčina na komunikativní úrovni"
+   },
+   {
+    "key": "maturita",
+    "name": "Maturitní vzdělání",
+    "description": "Ukončené středoškolské vzdělání s maturitou.",
+    "category": "vzdelani",
+    "weight": 2,
+    "must_have": false,
+    "ad_quote": "maturitní vzdělání"
+   },
+   {
+    "key": "erp",
+    "name": "Zkušenost s ERP systémem",
+    "description": "Práce v Heliosu, Pohodě nebo podobném ERP.",
+    "category": "dovednosti",
+    "weight": 1,
+    "must_have": false,
+    "ad_quote": "zkušenost s ERP systémem (Helios, Pohoda nebo podobný) výhodou"
+   }
+  ]
+ },
+ "candidates": {
+  "Kristyna_Vlckova_CV.pdf": {
+   "candidate": {
+    "name": "Kristýna Vlčková",
+    "email": "kristyna.vlckova@example.cz",
+    "phone": "+420 777 000 111",
+    "current_role": "Nákupčí, AGRO-PARTNER Kolín s.r.o."
+   },
+   "profile": {
+    "skills": [
+     "Nákup a jednání s dodavateli",
+     "Cenové kalkulace",
+     "MS Excel (kontingenční tabulky, SVYHLEDAT)",
+     "Helios Orange",
+     "Money S3"
+    ],
+    "experience": [
+     {
+      "title": "Nákupčí",
+      "employer": "AGRO-PARTNER Kolín s.r.o.",
+      "period": "03/2021 – dosud",
+      "summary": "Objednávky a jednání s dodavateli z Německa a Rakouska, kalkulace pro 40+ odběratelů, vedení zakázek v Heliosu."
+     },
+     {
+      "title": "Obchodní asistentka",
+      "employer": "Baumarkt Logistik CZ",
+      "period": "09/2018 – 02/2021",
+      "summary": "Vyřizování objednávek hobbymarketů, reklamace a fakturace."
+     }
+    ],
+    "education": [
+     {
+      "institution": "Obchodní akademie Kolín",
+      "degree": "maturita",
+      "period": "2018"
+     }
+    ],
+    "languages": [
+     {
+      "language": "němčina",
+      "level": "B2 (Goethe-Zertifikat)"
+     },
+     {
+      "language": "angličtina",
+      "level": "B1"
+     }
+    ],
+    "certifications": [
+     "Goethe-Zertifikat B2 (2020)"
+    ]
+   },
+   "verdicts": {
+    "praxe": [
+     "splnuje",
+     "Nákupčí – AGRO-PARTNER Kolín s.r.o. (03/2021 – dosud)",
+     "",
+     "Přes 5 let v nákupu, předtím 2,5 roku jako obchodní asistentka.",
+     ""
+    ],
+    "ridic": [
+     "splnuje",
+     "Řidičský průkaz sk. B, najeto cca 15 000 km ročně",
+     "",
+     "Uvádí průkaz i aktivní řízení.",
+     ""
+    ],
+    "excel": [
+     "splnuje",
+     "MS Excel – pokročilý (kontingenční tabulky, SVYHLEDAT, makra – základy)",
+     "",
+     "Uvádí přesně požadované funkce.",
+     ""
+    ],
+    "nemcina": [
+     "splnuje",
+     "Němčina – B2 (Goethe-Zertifikat B2, 2020)",
+     "",
+     "Certifikovaná úroveň B2 a denní komunikace s dodavateli.",
+     ""
+    ],
+    "maturita": [
+     "splnuje",
+     "Obchodní akademie Kolín, maturita (2018)",
+     "",
+     "",
+     ""
+    ],
+    "erp": [
+     "splnuje",
+     "vedení zakázek a skladových zásob v systému Helios Orange",
+     "",
+     "Zná Helios, který firma používá.",
+     ""
+    ]
+   },
+   "summary": "Odpovídá všem požadavkům pozice: přes 5 let v nákupu, přímo v oboru zahradní a lesní techniky, s doloženou němčinou B2 a zkušeností s Heliosem.",
+   "strengths": [
+    "Praxe přímo v oboru zahradní techniky",
+    "Zná Helios, odpadá zaškolení do ERP",
+    "Certifikovaná němčina B2 a jednání s dodavateli z Německa a Rakouska"
+   ],
+   "concerns": [
+    "Spíš nákupní než prodejní praxe, ověřit zkušenost s péčí o odběratele"
+   ],
+   "interview_questions": [
+    "Jak u vás vypadá jednání o ceně s německým nebo rakouským dodavatelem?",
+    "Měla jste na starosti vlastní odběratele, nebo jen podporu obchodníků?"
+   ],
+   "injection_detected": false
+  },
+  "Michal_Dolezal_CV.docx": {
+   "candidate": {
+    "name": "Michal Doležal",
+    "email": "michal.dolezal@example.cz",
+    "phone": "+420 603 000 222",
+    "current_role": "Obchodní zástupce, STAVMAT Polabí a.s."
+   },
+   "profile": {
+    "skills": [
+     "Obchod se stavebninami a zahradními centry",
+     "Pohoda (objednávky, faktury)",
+     "MS Office"
+    ],
+    "experience": [
+     {
+      "title": "Obchodní zástupce",
+      "employer": "STAVMAT Polabí a.s.",
+      "period": "2022 – dosud",
+      "summary": "Návštěvy stavebnin a zahradních center v regionu, sjednávání objednávek, vedení zákazníků v Pohodě."
+     },
+     {
+      "title": "Skladník / prodejce",
+      "employer": "OBI, Kolín",
+      "period": "2019 – 2022",
+      "summary": "Příjem zboží a poradenství zákazníkům v oddělení zahrada."
+     }
+    ],
+    "education": [
+     {
+      "institution": "SPŠ Poděbrady",
+      "degree": "maturita",
+      "period": "2019"
+     }
+    ],
+    "languages": [
+     {
+      "language": "angličtina",
+      "level": "B2"
+     },
+     {
+      "language": "němčina",
+      "level": "A2 (ze školy)"
+     }
+    ],
+    "certifications": [
+     "Řidičský průkaz B, C"
+    ]
+   },
+   "verdicts": {
+    "praxe": [
+     "splnuje",
+     "Obchodní zástupce – STAVMAT Polabí a.s. (2022 – dosud)",
+     "",
+     "Přes 4 roky v obchodě se zahradními centry jako zákazníky.",
+     ""
+    ],
+    "ridic": [
+     "splnuje",
+     "Řidičský průkaz B, C",
+     "",
+     "",
+     "Aktivní řízení neuvádí, u obchodního zástupce je ale pravděpodobné."
+    ],
+    "excel": [
+     "castecne",
+     "MS Office (Word, Excel – běžné vzorce)",
+     "",
+     "Kontingenční tabulky ani SVYHLEDAT neuvádí.",
+     ""
+    ],
+    "nemcina": [
+     "castecne",
+     "němčina – A2 (ze školy)",
+     "",
+     "A2 je pod komunikativní úrovní.",
+     ""
+    ],
+    "maturita": [
+     "splnuje",
+     "SPŠ Poděbrady – maturita (2019)",
+     "",
+     "",
+     ""
+    ],
+    "erp": [
+     "splnuje",
+     "Účetní program Pohoda – vystavování objednávek a faktur",
+     "",
+     "Pohodu inzerát výslovně zmiňuje.",
+     ""
+    ]
+   },
+   "summary": "Splňuje obě povinné podmínky a zná zahradní centra jako zákazníky. Slabší je němčina A2 a Excel jen na běžné úrovni.",
+   "strengths": [
+    "Zahradní centra v regionu zná jako zákazníky",
+    "Pohoda je v inzerátu výslovně zmíněná"
+   ],
+   "concerns": [
+    "Němčina jen A2",
+    "Excel jen na běžné úrovni"
+   ],
+   "interview_questions": [
+    "Zvládl byste telefonát s německým dodavatelem o zpožděné dodávce?",
+    "Jak byste v Excelu sečetl obrat podle odběratelů?"
+   ],
+   "injection_detected": false
+  },
+  "Daniel_Ruzicka_Resume_EN.pdf": {
+   "candidate": {
+    "name": "Daniel Růžička",
+    "email": "daniel.ruzicka@example.com",
+    "phone": "",
+    "current_role": "Sales Intern, GreenGarden Trading (Vídeň)"
+   },
+   "profile": {
+    "skills": [
+     "Příprava nabídek a zpracování objednávek",
+     "Excel (pivot tables, VLOOKUP)",
+     "Zákaznický servis"
+    ],
+    "experience": [
+     {
+      "title": "Sales Intern",
+      "employer": "GreenGarden Trading, Vienna",
+      "period": "06/2025 – 12/2025",
+      "summary": "Podpora key account manažerů s nabídkami a objednávkami, týdenní reporty v Excelu."
+     },
+     {
+      "title": "Part-time Customer Service",
+      "employer": "Mall.cz",
+      "period": "2023 – 2025",
+      "summary": "Zákaznický servis na částečný úvazek."
+     }
+    ],
+    "education": [
+     {
+      "institution": "University of Economics Prague",
+      "degree": "Bachelor in Business Administration",
+      "period": "2025"
+     },
+     {
+      "institution": "Gymnázium Kolín",
+      "degree": "maturita",
+      "period": "2022"
+     }
+    ],
+    "languages": [
+     {
+      "language": "němčina",
+      "level": "B2"
+     },
+     {
+      "language": "angličtina",
+      "level": "C1"
+     }
+    ],
+    "certifications": []
+   },
+   "verdicts": {
+    "praxe": [
+     "castecne",
+     "Sales Intern – GreenGarden Trading, Vienna (06/2025 – 12/2025)",
+     "Obchodní stážista – GreenGarden Trading, Vídeň (06/2025 – 12/2025)",
+     "Šestiměsíční stáž a zákaznický servis na částečný úvazek, plnohodnotná praxe kratší než 2 roky.",
+     ""
+    ],
+    "ridic": [
+     "splnuje",
+     "Driving licence B",
+     "Řidičský průkaz B",
+     "",
+     "Aktivní řízení neuvádí."
+    ],
+    "excel": [
+     "splnuje",
+     "Excel – advanced (pivot tables, VLOOKUP)",
+     "Excel – pokročilý (kontingenční tabulky, SVYHLEDAT)",
+     "",
+     ""
+    ],
+    "nemcina": [
+     "splnuje",
+     "German – B2",
+     "Němčina – B2",
+     "Stáž ve Vídni naznačuje praktické použití.",
+     ""
+    ],
+    "maturita": [
+     "splnuje",
+     "High school diploma (maturita), Gymnázium Kolín (2022)",
+     "Maturita, Gymnázium Kolín (2022)",
+     "Navíc bakalářský titul.",
+     ""
+    ],
+    "erp": [
+     "nelze_overit",
+     "",
+     "",
+     "Práci v ERP systému neuvádí.",
+     ""
+    ]
+   },
+   "summary": "Absolvent se stáží u obchodníka se zahradním zbožím, dobrou němčinou a Excelem. Plnohodnotná obchodní praxe je kratší než požadované 2 roky.",
+   "strengths": [
+    "Stáž přímo v obchodu se zahradním zbožím",
+    "Němčina B2 a angličtina C1",
+    "Pokročilý Excel"
+   ],
+   "concerns": [
+    "Praxe kratší než požadované 2 roky",
+    "Zkušenost s ERP neuvádí"
+   ],
+   "interview_questions": [
+    "Co jste ve GreenGarden dělal samostatně a co pod dohledem?",
+    "Pracoval jste během stáže v nějakém objednávkovém systému?"
+   ],
+   "injection_detected": false
+  },
+  "Anna_Sykorova.txt": {
+   "candidate": {
+    "name": "Anna Sýkorová",
+    "email": "anna.sykorova@example.cz",
+    "phone": "",
+    "current_role": "Referentka nákupu, KOVO Trade s.r.o."
+   },
+   "profile": {
+    "skills": [
+     "Nákup od německých a rakouských dodavatelů",
+     "Excel (kontingenční tabulky, XLOOKUP, Power Query)",
+     "SAP Business One"
+    ],
+    "experience": [
+     {
+      "title": "Referentka nákupu",
+      "employer": "KOVO Trade s.r.o., Mladá Boleslav",
+      "period": "2020 – dosud",
+      "summary": "Objednávky u německých a rakouských dodavatelů, reporting nákupu v Excelu, SAP Business One."
+     },
+     {
+      "title": "Asistentka obchodního oddělení",
+      "employer": "Dachdecker GmbH, Dresden",
+      "period": "2017 – 2020",
+      "summary": "Podpora obchodního oddělení v Německu."
+     }
+    ],
+    "education": [
+     {
+      "institution": "Gymnázium Lysá nad Labem",
+      "degree": "maturita",
+      "period": "2016"
+     },
+     {
+      "institution": "VŠE Praha, Mezinárodní obchod",
+      "degree": "bakalářské studium (nedokončeno)",
+      "period": ""
+     }
+    ],
+    "languages": [
+     {
+      "language": "němčina",
+      "level": "C1"
+     },
+     {
+      "language": "angličtina",
+      "level": "B2"
+     }
+    ],
+    "certifications": []
+   },
+   "verdicts": {
+    "praxe": [
+     "splnuje",
+     "2020 – dosud: Referentka nákupu, KOVO Trade s.r.o., Mladá Boleslav",
+     "",
+     "Předtím 3 roky v obchodním oddělení v Německu.",
+     ""
+    ],
+    "ridic": [
+     "nesplnuje",
+     "Řidičský průkaz nemám, dojíždím vlakem.",
+     "",
+     "Výslovně uvádí, že řidičský průkaz nemá.",
+     ""
+    ],
+    "excel": [
+     "splnuje",
+     "reporting nákupu v Excelu (kontingenční tabulky, XLOOKUP, Power Query)",
+     "",
+     "",
+     ""
+    ],
+    "nemcina": [
+     "splnuje",
+     "Němčina – C1 (5 let v Německu)",
+     "",
+     "",
+     ""
+    ],
+    "maturita": [
+     "splnuje",
+     "Gymnázium Lysá nad Labem – maturita (2016)",
+     "",
+     "",
+     ""
+    ],
+    "erp": [
+     "splnuje",
+     "práce v SAP Business One",
+     "",
+     "Jiný systém než Helios, ale srovnatelný.",
+     ""
+    ]
+   },
+   "summary": "Odborné požadavky splňuje velmi dobře: 8 let v nákupu, němčina C1 a pokročilý Excel. Nesplňuje povinnou podmínku řidičského průkazu.",
+   "strengths": [
+    "Nejlepší doložená němčina",
+    "Pokročilý Excel včetně Power Query",
+    "Dlouhá praxe v nákupu od dodavatelů z Německa a Rakouska"
+   ],
+   "concerns": [
+    "Nemá řidičský průkaz, který je v inzerátu podmínkou"
+   ],
+   "interview_questions": [
+    "Řidičský průkaz je u nás podmínkou kvůli návštěvám odběratelů. Plánujete si ho udělat?"
+   ],
+   "injection_detected": false
+  },
+  "Radek_Polak_zivotopis.pdf": {
+   "candidate": {
+    "name": "Radek Polák",
+    "email": "radek.polak@example.cz",
+    "phone": "",
+    "current_role": "Prodavač, elektro prodejna"
+   },
+   "profile": {
+    "skills": [
+     "Prodej spotřební elektroniky",
+     "Práce s pokladnou",
+     "Excel (základy)"
+    ],
+    "experience": [
+     {
+      "title": "Prodavač",
+      "employer": "elektro prodejna, Praha",
+      "period": "2023 – dosud",
+      "summary": "Prodej spotřební elektroniky, pokladna, doplňování zboží."
+     },
+     {
+      "title": "Brigády",
+      "employer": "sklad, rozvoz pizzy",
+      "period": "2021 – 2023",
+      "summary": "Brigádní práce."
+     }
+    ],
+    "education": [
+     {
+      "institution": "SOU Praha",
+      "degree": "výuční list, obor Prodavač",
+      "period": "2021"
+     }
+    ],
+    "languages": [
+     {
+      "language": "angličtina",
+      "level": "základy"
+     }
+    ],
+    "certifications": []
+   },
+   "verdicts": {
+    "praxe": [
+     "castecne",
+     "Prodavač – elektro prodejna, Praha (2023 – dosud)",
+     "",
+     "Maloobchodní prodej, ne obchod s firemními odběrateli ani nákup.",
+     ""
+    ],
+    "ridic": [
+     "nelze_overit",
+     "",
+     "",
+     "Řidičský průkaz v životopise neuvádí.",
+     ""
+    ],
+    "excel": [
+     "nesplnuje",
+     "Excel – základy",
+     "",
+     "Uvádí jen základní znalost.",
+     ""
+    ],
+    "nemcina": [
+     "nelze_overit",
+     "",
+     "",
+     "Němčinu neuvádí, z jazyků jen angličtinu na základní úrovni.",
+     ""
+    ],
+    "maturita": [
+     "nesplnuje",
+     "SOU Praha, obor Prodavač – výuční list (2021)",
+     "",
+     "Výuční list, ne maturita.",
+     ""
+    ],
+    "erp": [
+     "nelze_overit",
+     "",
+     "",
+     "",
+     ""
+    ]
+   },
+   "summary": "Má zkušenost jen z maloobchodního prodeje, bez nákupu a obchodu s firemními odběrateli. Chybí maturita a pokročilý Excel, řidičský průkaz neuvádí.",
+   "strengths": [
+    "Zkušenost s prací se zákazníky"
+   ],
+   "concerns": [
+    "Jen maloobchodní praxe",
+    "Excel na základní úrovni",
+    "Životopis obsahuje skrytý text určený AI"
+   ],
+   "interview_questions": [
+    "Máte řidičský průkaz skupiny B?",
+    "Domluvíte se německy?"
+   ],
+   "injection_detected": true
+  }
+ }
+}

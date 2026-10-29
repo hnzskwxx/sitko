@@ -1,0 +1,9 @@
+node_modules
+dist
+data
+.env
+*.log
+e2e-vystup
+test-results
+.git
+spustit.cmd
