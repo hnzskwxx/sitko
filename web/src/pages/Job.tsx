@@ -90,7 +90,7 @@ export function JobPage({ me }: { me: Me }) {
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
 
-      <UploadDialog jobId={j.id} open={uploadOpen} onOpenChange={closeUpload} />
+      <UploadDialog jobId={j.id} open={uploadOpen} onOpenChange={closeUpload} blocked={!me.organization.subscription.canEvaluate} />
       <ConfirmDialog
         open={deleteOpen} onOpenChange={setDeleteOpen} danger title={`Smazat pozici ${j.title}?`} confirmLabel="Smazat pozici"
         onConfirm={async () => {

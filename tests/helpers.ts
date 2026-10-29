@@ -10,6 +10,7 @@ import { AiError, type AiProvider, type EvalInput } from '../server/services/ai/
 import { EvaluateOutput, SuggestOutput } from '../server/services/ai/schemas.js';
 import { ProcessingQueue } from '../server/services/queue.js';
 import { FileStorage } from '../server/services/storage.js';
+import { quotaFor } from '../server/services/subscription.js';
 
 export const SAMPLES = path.resolve(import.meta.dirname, '..', 'ukazka');
 export const sample = (name: string): Buffer => fs.readFileSync(path.join(SAMPLES, name));
@@ -70,7 +71,7 @@ export function makeTestApp(provider: AiProvider | null = new FakeProvider(), en
   const db = openDb(':memory:');
   const storage = new FileStorage(path.join(dir, 'uploads'));
   const providers = { forOrg: () => provider };
-  const queue = new ProcessingQueue(db, storage, providers, { concurrency: 2, monthlyLimit: config.ai.monthlyLimit });
+  const queue = new ProcessingQueue(db, storage, providers, { concurrency: 2, monthlyLimit: config.ai.monthlyLimit, quota: (orgId) => quotaFor(db, config, orgId) });
   const ctx: Ctx = { db, config, storage, queue, providers };
   const express = createApp(ctx, { csp: false });
   finalize(express);

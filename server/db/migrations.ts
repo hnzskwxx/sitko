@@ -211,4 +211,37 @@ CREATE INDEX idx_audit_org ON audit_logs(org_id, created_at);
 CREATE INDEX idx_audit_job ON audit_logs(job_id, created_at);
 `,
   },
+  {
+    // Placené členství: tarify podle počtu CV za měsíc, předplatné „do data“ (platba fakturou,
+    // aktivuje provozovatel ve Správě), objednávka tarifu a fakturační údaje firmy.
+    id: '002_subscriptions',
+    sql: `
+CREATE TABLE plans (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  monthly_cv_limit INTEGER NOT NULL CHECK (monthly_cv_limit BETWEEN 1 AND 100000),
+  price_czk INTEGER CHECK (price_czk IS NULL OR price_czk BETWEEN 0 AND 10000000),
+  is_public INTEGER NOT NULL DEFAULT 1,
+  position INTEGER NOT NULL DEFAULT 0,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL
+);
+
+INSERT INTO plans (id, name, monthly_cv_limit, price_czk, is_public, position, created_at, updated_at) VALUES
+  ('plan_start', 'Start', 100, NULL, 1, 1, '2026-10-29T00:00:00.000Z', '2026-10-29T00:00:00.000Z'),
+  ('plan_firma', 'Firma', 500, NULL, 1, 2, '2026-10-29T00:00:00.000Z', '2026-10-29T00:00:00.000Z');
+
+ALTER TABLE organizations ADD COLUMN plan_id TEXT REFERENCES plans(id) ON DELETE SET NULL;
+ALTER TABLE organizations ADD COLUMN paid_until TEXT;
+ALTER TABLE organizations ADD COLUMN requested_plan_id TEXT REFERENCES plans(id) ON DELETE SET NULL;
+ALTER TABLE organizations ADD COLUMN requested_at TEXT;
+ALTER TABLE organizations ADD COLUMN admin_note TEXT NOT NULL DEFAULT '';
+ALTER TABLE organizations ADD COLUMN billing_name TEXT NOT NULL DEFAULT '';
+ALTER TABLE organizations ADD COLUMN billing_ico TEXT NOT NULL DEFAULT '';
+ALTER TABLE organizations ADD COLUMN billing_dic TEXT NOT NULL DEFAULT '';
+ALTER TABLE organizations ADD COLUMN billing_address TEXT NOT NULL DEFAULT '';
+ALTER TABLE organizations ADD COLUMN billing_email TEXT NOT NULL DEFAULT '';
+CREATE INDEX idx_org_requested ON organizations(requested_at);
+`,
+  },
 ];

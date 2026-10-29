@@ -39,6 +39,31 @@ Typy odpovědí jsou v `shared/types.ts`.
 | POST | `/organization/invites` | vlastník | `{role, email?}` → `url` s tokenem (zobrazí se jen jednou, platí 7 dní) |
 | DELETE | `/organization/invites/:id` | vlastník | zruší pozvánku |
 
+## Předplatné (firma)
+
+Platí jen se `SUBSCRIPTIONS=true`. Bez aktivního předplatného vrací akce, které spouštějí AI (návrh požadavků, nahrání CV, nové hodnocení, opakování), **402 `subscription_inactive`**. Čtení, úpravy a mazání dat fungují dál. Stav je i v `Me.organization.subscription`.
+
+| Metoda | Cesta | Role | Popis |
+|---|---|---|---|
+| GET | `/organization/subscription` | všichni | `{subscription, plans (nabízené), billing, contact, monthEvaluations}` |
+| PUT | `/organization/billing` | vlastník | `{name, ico (8 číslic nebo prázdné), dic, address, email}` |
+| POST | `/organization/subscription/order` | vlastník | `{planId}`: objednávka tarifu. Vyžaduje vyplněný název, adresu a e-mail (jinak 400 `billing_incomplete` s `fields`). |
+| DELETE | `/organization/subscription/order` | vlastník | zruší objednávku |
+
+## Správa (provozovatel)
+
+Jen pro e-maily z `ADMIN_EMAILS`, ostatním vrací 404. Nevidí pozice, kandidáty ani dokumenty firem: izolace organizací platí i pro provozovatele.
+
+| Metoda | Cesta | Popis |
+|---|---|---|
+| GET | `/admin/organizations` | firmy (bez ukázkové): vlastník, předplatné, objednávka, využití tento měsíc. Objednávky první. |
+| GET | `/admin/organizations/:id` | navíc fakturační údaje, interní poznámka, počty pozic/kandidátů, poslední aktivita |
+| PATCH | `/admin/organizations/:id` | `{planId?, paidUntil? (RRRR-MM-DD, včetně), adminNote?}`. Datum bez tarifu → 400. Přidělení objednaného tarifu s datem objednávku uzavře. Zapisuje se do auditního logu firmy. |
+| GET | `/admin/plans` | všechny tarify s počtem firem |
+| POST | `/admin/plans` | `{name, monthlyCvLimit, priceCzk \| null, isPublic}` |
+| PATCH | `/admin/plans/:id` | totéž; změna limitu platí hned pro všechny firmy s tarifem |
+| DELETE | `/admin/plans/:id` | jen nepoužitý tarif (jinak 409 `plan_in_use`) |
+
 ## Přehled a pozice
 
 | Metoda | Cesta | Popis |

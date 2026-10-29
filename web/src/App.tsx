@@ -15,6 +15,7 @@ const JobPage = lazy(() => import('./pages/Job').then((m) => ({ default: m.JobPa
 const JobNewPage = lazy(() => import('./pages/JobNew').then((m) => ({ default: m.JobNewPage })));
 const JobsPage = lazy(() => import('./pages/Jobs').then((m) => ({ default: m.JobsPage })));
 const SettingsPage = lazy(() => import('./pages/Settings').then((m) => ({ default: m.SettingsPage })));
+const AdminPage = lazy(() => import('./pages/Admin').then((m) => ({ default: m.AdminPage })));
 
 export function App() {
   const me = useMe();
@@ -46,6 +47,7 @@ export function App() {
               <Route path="/pozice/:jobId/kandidati/:appId" element={<CandidatePage me={user} />} />
               <Route path="/pozice/:jobId/*" element={<JobPage me={user} />} />
               <Route path="/nastaveni/*" element={<SettingsPage me={user} />} />
+              {user.isPlatformAdmin && <Route path="/sprava/*" element={<AdminPage />} />}
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
             </Suspense>

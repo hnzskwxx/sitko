@@ -12,6 +12,7 @@ import { Providers } from './providers.js';
 import { retentionSweep } from './services/applications.js';
 import { ProcessingQueue } from './services/queue.js';
 import { FileStorage } from './services/storage.js';
+import { quotaFor } from './services/subscription.js';
 
 try { process.loadEnvFile(); } catch { /* .env je volitelný */ }
 
@@ -39,7 +40,11 @@ async function main(): Promise<void> {
   const db = openDb(config.dbPath);
   const storage = new FileStorage(config.uploadDir);
   const providers = Providers.fromConfig(config, path.join(ROOT, 'ukazka'));
-  const queue = new ProcessingQueue(db, storage, providers, { concurrency: config.ai.concurrency, monthlyLimit: config.ai.monthlyLimit });
+  const queue = new ProcessingQueue(db, storage, providers, {
+    concurrency: config.ai.concurrency,
+    monthlyLimit: config.ai.monthlyLimit,
+    quota: (orgId) => quotaFor(db, config, orgId),
+  });
   const ctx: Ctx = { db, config, storage, queue, providers };
 
   const app = createApp(ctx, { csp: config.isProd });
@@ -87,10 +92,13 @@ async function main(): Promise<void> {
       url: `http://localhost:${config.port}`, mode: config.isProd ? 'production' : 'development',
       ai: config.ai.apiKey ? config.ai.model : 'nenastaveno (chybí ANTHROPIC_API_KEY)',
     });
-    if (config.isProd && config.ai.apiKey && config.allowRegistration && !config.registrationCode) {
+    if (config.isProd && config.ai.apiKey && config.allowRegistration && !config.registrationCode && !config.subscriptions) {
       log.warn('registration_open_without_code', {
-        hint: 'Kdokoli se může zaregistrovat a hodnotit na váš API klíč. Nastavte REGISTRATION_CODE nebo ALLOW_REGISTRATION=false.',
+        hint: 'Kdokoli se může zaregistrovat a hodnotit na váš API klíč. Nastavte SUBSCRIPTIONS=true, REGISTRATION_CODE nebo ALLOW_REGISTRATION=false.',
       });
+    }
+    if (config.subscriptions && !config.adminEmails.length) {
+      log.warn('subscriptions_without_admin', { hint: 'Placené členství je zapnuté, ale chybí ADMIN_EMAILS: nikdo nemůže firmy aktivovat.' });
     }
   });
 

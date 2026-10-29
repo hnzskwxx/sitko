@@ -10,7 +10,7 @@ import {
 } from '../components/RequirementsEditor';
 import { useToast } from '../components/toast';
 import { Button, Notice, Spinner } from '../components/ui';
-import { plural } from '../hooks';
+import { plural, useMe } from '../hooks';
 import { Steps } from './JobNew';
 
 export function JobRequirements({ job, setup }: { job: JobDetail; setup: boolean }) {
@@ -26,6 +26,8 @@ export function JobRequirements({ job, setup }: { job: JobDetail; setup: boolean
   const toast = useToast();
   const navigate = useNavigate();
   const autoRan = useRef(false);
+  // Bez aktivního předplatného server návrh odmítne: rovnou to říct a nevolat ho
+  const canAi = useMe().data?.organization.subscription.canEvaluate ?? true;
 
   const dirty = JSON.stringify(toPayload(drafts)) !== JSON.stringify(toPayload(initial));
 
@@ -50,7 +52,8 @@ export function JobRequirements({ job, setup }: { job: JobDetail; setup: boolean
   useEffect(() => {
     if (setup && !job.requirements.length && !autoRan.current) {
       autoRan.current = true;
-      void suggest();
+      if (canAi) void suggest();
+      else setDrafts((d) => (d.length ? d : [emptyRequirement()]));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setup, job.requirements.length]);
@@ -89,10 +92,12 @@ export function JobRequirements({ job, setup }: { job: JobDetail; setup: boolean
               <h2 className="section-title">{setup ? 'Zkontrolujte požadavky' : 'Požadavky pozice'}</h2>
               <p className="small muted">Podle nich se hodnotí každý životopis. Povinné požadavky ovlivňují řazení, nikoho ale nevyřazují.</p>
             </div>
-            <Button size="sm" icon={<Sparkles />} loading={suggesting} onClick={() => (drafts.some((d) => d.name.trim()) ? setConfirmSuggest(true) : void suggest())}>
+            <Button size="sm" icon={<Sparkles />} loading={suggesting} disabled={!canAi}
+              onClick={() => (drafts.some((d) => d.name.trim()) ? setConfirmSuggest(true) : void suggest())}>
               Navrhnout z inzerátu
             </Button>
           </div>
+          {!canAi && <Notice>Návrh požadavků z inzerátu se zapne s aktivním předplatným. Zatím je přidejte ručně, uloží se.</Notice>}
 
           {aiNotice && <Notice tone="warning" icon={<CircleAlert />}>{aiNotice}</Notice>}
           {suggesting && !drafts.length ? <div className="panel panel-pad"><Spinner label="Čtu inzerát a navrhuji požadavky…" /></div>

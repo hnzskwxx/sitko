@@ -8,6 +8,7 @@ import { detectFile, UnsupportedFileError } from './filetype.js';
 import { detectInjection } from './injection.js';
 import { listRequirements } from './jobs.js';
 import { computeScore } from './scoring.js';
+import { monthEvaluations, type Quota } from './subscription.js';
 import type { FileStorage } from './storage.js';
 import { AiError, type AiProvider, type AiUsage } from './ai/provider.js';
 import { PROMPT_VERSION } from './ai/prompts.js';
@@ -36,12 +37,20 @@ export class ProcessingQueue {
   private scheduled = false;
   private stopped = true;
   private idleResolvers: Array<() => void> = [];
+  /** Rozpracovaná hodnocení skutečnou AI podle firmy: aby souběžné úlohy nepřekročily limit tarifu. */
+  private inflight = new Map<string, number>();
+  private reservations = new Map<string, string>();
 
   constructor(
     private db: DB,
     private storage: FileStorage,
     private providers: ProviderResolver,
-    private opts: { concurrency: number; monthlyLimit: number },
+    private opts: {
+      concurrency: number;
+      monthlyLimit: number;
+      /** Placené členství: smí firma teď hodnotit a s jakým limitem (jinak platí monthlyLimit). */
+      quota?: (orgId: string) => Quota;
+    },
   ) {}
 
   start(pollMs = 2000): void {
@@ -124,6 +133,19 @@ export class ProcessingQueue {
     return r.changes;
   }
 
+  private reserve(appId: string, orgId: string): void {
+    this.inflight.set(orgId, (this.inflight.get(orgId) ?? 0) + 1);
+    this.reservations.set(appId, orgId);
+  }
+
+  private release(appId: string): void {
+    const orgId = this.reservations.get(appId);
+    if (!orgId) return;
+    this.reservations.delete(appId);
+    const n = (this.inflight.get(orgId) ?? 1) - 1;
+    if (n > 0) this.inflight.set(orgId, n); else this.inflight.delete(orgId);
+  }
+
   private async process(app: Claimed): Promise<void> {
     const started = Date.now();
     try {
@@ -131,6 +153,8 @@ export class ProcessingQueue {
       log.info('application_processed', { applicationId: app.id, ms: Date.now() - started });
     } catch (err) {
       this.handleFailure(app, err);
+    } finally {
+      this.release(app.id);
     }
   }
 
@@ -149,14 +173,14 @@ export class ProcessingQueue {
       throw new PermanentError('ai_not_configured', 'AI není nastavená (chybí ANTHROPIC_API_KEY). Po nastavení klíče zkuste zpracování znovu.');
     }
     if (provider.source === 'ai') {
-      const monthStart = new Date(Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), 1)).toISOString();
-      const used = (db.prepare(
-        `SELECT COUNT(*) AS n FROM evaluations e JOIN applications a ON a.id = e.application_id
-         WHERE a.org_id = ? AND e.source = 'ai' AND e.created_at >= ?`,
-      ).get(org.id, monthStart) as { n: number }).n;
-      if (used >= this.opts.monthlyLimit) {
-        throw new PermanentError('limit_reached', `Organizace vyčerpala měsíční limit ${this.opts.monthlyLimit} hodnocení.`);
+      const quota = this.opts.quota?.(org.id) ?? { ok: true as const, limit: this.opts.monthlyLimit };
+      if (!quota.ok) throw new PermanentError(quota.code, quota.message);
+      if (monthEvaluations(db, org.id) + (this.inflight.get(org.id) ?? 0) >= quota.limit) {
+        throw new PermanentError('limit_reached', this.opts.quota
+          ? `Tarif má limit ${quota.limit} hodnocení za měsíc a ten je vyčerpaný. Vyšší tarif objednáte v Nastavení → Předplatné, nebo zkuste znovu příští měsíc.`
+          : `Organizace vyčerpala měsíční limit ${quota.limit} hodnocení.`);
       }
+      this.reserve(app.id, org.id); // uvolní se v process() po uložení hodnocení nebo po chybě
     }
 
     // 1) Text dokumentu (jednou pro dokument, sdílený napříč pozicemi)

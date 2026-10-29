@@ -8,10 +8,12 @@ import { newId, now, type DB } from '../db/index.js';
 import { AppError, notFound, parse } from '../lib/errors.js';
 import { hashPassword, newToken, verifyPassword } from '../lib/security.js';
 import { audit } from '../services/audit.js';
+import { loadSubscription } from '../services/subscription.js';
 import { SUPPORTED_FORMATS } from '../services/filetype.js';
 import { passwordSchema } from './auth.js';
 
 export function usageFor(ctx: Ctx, orgId: string, isDemo: boolean): Usage {
+  const sub = loadSubscription(ctx.db, ctx.config, orgId);
   const monthStart = new Date(Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), 1)).toISOString();
   const u = ctx.db.prepare(
     `SELECT COUNT(*) AS n, COALESCE(SUM(e.input_tokens), 0) AS inp, COALESCE(SUM(e.output_tokens), 0) AS outp
@@ -23,7 +25,7 @@ export function usageFor(ctx: Ctx, orgId: string, isDemo: boolean): Usage {
     aiConfigured: Boolean(provider),
     model: provider?.model ?? null,
     monthEvaluations: u.n,
-    monthlyLimit: ctx.config.ai.monthlyLimit,
+    monthlyLimit: sub.monthlyLimit,
     monthInputTokens: u.inp,
     monthOutputTokens: u.outp,
     maxFileMb: ctx.config.upload.maxFileMb,

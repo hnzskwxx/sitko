@@ -4,6 +4,7 @@ import type { Config } from './config.js';
 import { bool, now, type DB } from './db/index.js';
 import { AppError, forbidden } from './lib/errors.js';
 import { newToken, sha256 } from './lib/security.js';
+import { computeSubscription, SUBSCRIPTION_JOIN, SUBSCRIPTION_SELECT, type SubscriptionRow } from './services/subscription.js';
 
 export const SESSION_COOKIE = 'sitko_session';
 export const CSRF_HEADER = 'x-sitko-request';
@@ -56,11 +57,12 @@ export function destroySession(db: DB, cfg: Config, req: Request, res: Response)
 export function sessionLoader(db: DB, cfg: Config) {
   const lookup = db.prepare(`
     SELECT s.id AS sid, s.expires_at, u.id AS uid, u.email, u.name AS uname,
-           o.id AS oid, o.name AS oname, o.is_demo, o.retention_days, m.role
+           o.id AS oid, o.name AS oname, o.retention_days, m.role, ${SUBSCRIPTION_SELECT}
       FROM sessions s
       JOIN users u ON u.id = s.user_id
       JOIN organizations o ON o.id = s.org_id
       JOIN memberships m ON m.org_id = s.org_id AND m.user_id = s.user_id
+      ${SUBSCRIPTION_JOIN}
      WHERE s.id = ? AND s.expires_at > ?`);
 
   return (req: Request, res: Response, next: NextFunction): void => {
@@ -75,8 +77,12 @@ export function sessionLoader(db: DB, cfg: Config) {
           role: r.role as Role,
           me: {
             user: { id: r.uid as string, email: r.email as string, name: r.uname as string },
-            organization: { id: r.oid as string, name: r.oname as string, isDemo: bool(r.is_demo), retentionDays: r.retention_days as number },
+            organization: {
+              id: r.oid as string, name: r.oname as string, isDemo: bool(r.is_demo), retentionDays: r.retention_days as number,
+              subscription: computeSubscription(r as unknown as SubscriptionRow, cfg),
+            },
             role: r.role as Role,
+            isPlatformAdmin: isPlatformAdmin(cfg, r.email as string),
           },
         };
         // Klouzavá expirace: prodloužit, když zbývá méně než polovina
@@ -114,6 +120,19 @@ export function csrfGuard(cfg: Config) {
 export function requireAuth(req: Request, _res: Response, next: NextFunction): void {
   if (!req.auth) return next(new AppError(401, 'unauthenticated', 'Přihlaste se prosím.'));
   next();
+}
+
+/** Provozovatel Sítka: e-mail je v ADMIN_EMAILS. Ověřuje se při každém požadavku na serveru. */
+export function isPlatformAdmin(cfg: Config, email: string): boolean {
+  return cfg.adminEmails.includes(email.toLowerCase());
+}
+
+/** Správa je pro ostatní neviditelná (404, ne 403). */
+export function requirePlatformAdmin(cfg: Config) {
+  return (req: Request, _res: Response, next: NextFunction): void => {
+    if (!req.auth || !isPlatformAdmin(cfg, req.auth.me.user.email)) return next(new AppError(404, 'not_found', 'Tento endpoint neexistuje.'));
+    next();
+  };
 }
 
 export function requireOwner(req: Request, _res: Response, next: NextFunction): void {

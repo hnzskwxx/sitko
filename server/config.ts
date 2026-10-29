@@ -13,6 +13,12 @@ export interface Config {
   registrationCode: string | null;
   /** Ukázka se připravuje při startu a přihlašovací stránka nabízí vstup do ní. */
   demoOnStart: boolean;
+  /** Placené členství: AI jen pro firmy s aktivním předplatným, limit podle tarifu. */
+  subscriptions: boolean;
+  /** E-maily provozovatelů (malými písmeny), kteří vidí Správu. */
+  adminEmails: string[];
+  /** Kontakt na provozovatele, který firmy vidí u předplatného. */
+  billingContact: string | null;
   sessionDays: number;
   ai: {
     apiKey: string | null;
@@ -46,6 +52,9 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
     allowRegistration: env.ALLOW_REGISTRATION !== 'false',
     registrationCode: env.REGISTRATION_CODE?.trim() || null,
     demoOnStart: env.SEED_DEMO_ON_START === 'true',
+    subscriptions: env.SUBSCRIPTIONS === 'true',
+    adminEmails: (env.ADMIN_EMAILS ?? '').split(',').map((e) => e.trim().toLowerCase()).filter(Boolean),
+    billingContact: env.BILLING_CONTACT?.trim() || null,
     sessionDays: int(env.SESSION_DAYS, 14, 1, 90),
     ai: {
       apiKey: env.ANTHROPIC_API_KEY?.trim() || null,

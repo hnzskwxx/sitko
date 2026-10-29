@@ -16,6 +16,7 @@ import { detectFile, UnsupportedFileError } from '../services/filetype.js';
 import { getJobRow, replaceRequirements, toDetail, toSummary, type JobRow } from '../services/jobs.js';
 import { AiError } from '../services/ai/provider.js';
 import { usageFor } from './org.js';
+import { assertCanUseAi } from '../services/subscription.js';
 
 const titleSchema = z.string().trim().min(2, 'Vyplňte název pozice.').max(160, 'Název je příliš dlouhý.');
 const adSchema = z.string().trim().min(30, 'Inzerát je příliš krátký, vložte celý text.').max(20_000, 'Inzerát je příliš dlouhý (max. 20 000 znaků).');
@@ -167,6 +168,7 @@ export function jobRoutes(ctx: Ctx): Router {
     async (req, res) => {
       const a = auth(req);
       const job = getJobRow(db, a.orgId, String(req.params.id));
+      assertCanUseAi(db, ctx.config, a.orgId);
       const provider = ctx.providers.forOrg(a.me.organization.isDemo);
       if (!provider) {
         throw new AppError(503, 'ai_not_configured', 'Návrh požadavků vyžaduje AI, která není nastavená. Požadavky přidejte ručně.');

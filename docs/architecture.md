@@ -66,6 +66,8 @@ organizations ─┬─< memberships >── users ──< sessions
 | `evaluation_items` | výsledek jednoho požadavku: verdikt, citace, stav ověření citace, stránka, oprava personalistou | FK evaluation, FK requirement (SET NULL) |
 | `notes` | poznámky personalisty k přihlášce | FK application, autor |
 | `audit_logs` | kdo co kdy změnil (bez obsahu CV) | index (org, created_at), (entity) |
+| `plans` | tarify: název, CV za měsíc, cena Kč/měsíc, nabízí se | migrace `002_subscriptions` |
+| `organizations` (doplněno) | `plan_id`, `paid_until` (poslední den, včetně), objednávka (`requested_plan_id`, `requested_at`), fakturační údaje, `admin_note` | stav předplatného se počítá při každém požadavku, nic se neplánuje |
 
 **Proč přihláška (`applications`):** jeden kandidát může kandidovat na víc pozic. Hodnocení patří ke kombinaci kandidát × pozice, ne ke kandidátovi.
 
@@ -139,3 +141,12 @@ Funkce je v `server/services/scoring.ts` a pokrytá testy.
 - **AI Act (nařízení 2024/1689):** třídění a hodnocení uchazečů je vysoce riziková AI (příloha III, bod 4a). Digital Omnibus (nařízení 2026/1744) posunul povinnosti pro samostatné vysoce rizikové systémy na **2. 12. 2027**. Sítko jako *poskytovatel* bude potřebovat řízení rizik, technickou dokumentaci, logování, lidský dohled, posouzení shody a registraci v databázi EU. Firma jako *uživatel (deployer)* musí zajistit lidský dohled, informovat zaměstnance a uchazeče a uchovávat logy. Povinnosti transparentnosti (čl. 50) platí od 2. 8. 2026.
 - **GDPR:** firma je správce, Sítko zpracovatel, takže je potřeba zpracovatelská smlouva. Čl. 22 (automatizované rozhodování) splňuje lidské rozhodnutí. Uchazeči musí být informováni (čl. 13/14). U AI hodnocení uchazečů bude pravděpodobně potřeba DPIA. Anthropic je dílčí zpracovatel. Je nutné ověřit podmínky zpracování dat a umístění.
 - **Co zbývá:** právní posouzení konkrétního nasazení, šablona informace pro uchazeče, DPA, DPIA, dokumentace podle AI Act.
+
+## Placené členství
+
+Zapíná se `SUBSCRIPTIONS=true`. Firma platí fakturou, provozovatel (`ADMIN_EMAILS`) ve Správě nastaví tarif a datum, do kdy je zaplaceno. Stav (`active`, `pending`, `expired`) se počítá z data v českém čase (`server/services/subscription.ts`), takže předplatné samo skončí bez plánovače.
+
+- **Kde se hlídá:** server před každou akcí, která spouští AI (návrh požadavků, nahrání, nové hodnocení, opakování), vrací 402. Fronta kontroluje stav i limit znovu těsně před voláním AI, takže předplatné, které skončí během čekání, AI nespustí.
+- **Limit tarifu** platí za kalendářní měsíc a počítá hodnocení skutečnou AI. Souběžné úlohy si místo v limitu rezervují (fronta drží počet rozpracovaných hodnocení na firmu), takže ho nepřekročí ani při paralelním zpracování.
+- **Bez předplatného** firma dál vidí, upravuje, exportuje a maže svá data. Vypnutá je jen AI.
+- **Správa** nevidí pozice, kandidáty ani životopisy. Pracuje jen s firmou, tarifem a fakturačními údaji.

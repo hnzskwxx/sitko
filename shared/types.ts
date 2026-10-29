@@ -37,8 +37,85 @@ export interface ApiList<T> {
 
 export interface Me {
   user: { id: string; email: string; name: string };
-  organization: { id: string; name: string; isDemo: boolean; retentionDays: number };
+  organization: { id: string; name: string; isDemo: boolean; retentionDays: number; subscription: Subscription };
   role: Role;
+  /** Provozovatel Sítka (ADMIN_EMAILS): vidí Správu firem a tarifů. */
+  isPlatformAdmin: boolean;
+}
+
+// ---------- Předplatné ----------
+
+export const SUBSCRIPTION_STATUSES = ['active', 'pending', 'expired', 'demo', 'unlimited'] as const;
+export type SubscriptionStatus = (typeof SUBSCRIPTION_STATUSES)[number];
+export const SUBSCRIPTION_STATUS_LABEL: Record<SubscriptionStatus, string> = {
+  active: 'Aktivní',
+  pending: 'Čeká na aktivaci',
+  expired: 'Vypršelo',
+  demo: 'Ukázka',
+  unlimited: 'Bez omezení',
+};
+
+export interface Plan {
+  id: string;
+  name: string;
+  monthlyCvLimit: number;
+  /** Cena za měsíc v Kč; null = zatím nenastavená. */
+  priceCzk: number | null;
+  /** Nabízí se firmám k objednání. */
+  isPublic: boolean;
+  position: number;
+  /** Jen ve Správě: kolik firem tarif má. */
+  organizations?: number;
+}
+
+export interface Subscription {
+  /** false = server běží bez placeného členství (vývoj, vlastní provoz). */
+  enabled: boolean;
+  status: SubscriptionStatus;
+  /** Smí firma používat AI (hodnocení, návrhy požadavků). */
+  canEvaluate: boolean;
+  plan: { id: string; name: string } | null;
+  monthlyLimit: number;
+  /** Poslední den předplatného (YYYY-MM-DD, včetně). */
+  paidUntil: string | null;
+  daysLeft: number | null;
+  requestedPlan: { id: string; name: string } | null;
+  requestedAt: string | null;
+}
+
+export interface BillingInfo {
+  name: string;
+  ico: string;
+  dic: string;
+  address: string;
+  email: string;
+}
+
+export interface SubscriptionOverview {
+  subscription: Subscription;
+  plans: Plan[];
+  billing: BillingInfo;
+  /** Kontakt na provozovatele (BILLING_CONTACT). */
+  contact: string | null;
+  monthEvaluations: number;
+}
+
+export interface AdminOrgRow {
+  id: string;
+  name: string;
+  createdAt: string;
+  owner: { name: string; email: string } | null;
+  members: number;
+  subscription: Subscription;
+  monthEvaluations: number;
+}
+
+export interface AdminOrgDetail extends AdminOrgRow {
+  billing: BillingInfo;
+  adminNote: string;
+  jobs: number;
+  candidates: number;
+  lastActivityAt: string | null;
 }
 
 export interface Member {

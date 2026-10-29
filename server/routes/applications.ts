@@ -14,6 +14,7 @@ import { audit } from '../services/audit.js';
 import { recomputeEvaluation, setOverride } from '../services/evaluations.js';
 import { getJobRow } from '../services/jobs.js';
 import { requeue } from '../services/queue.js';
+import { assertCanUseAi } from '../services/subscription.js';
 
 export function applicationRoutes(ctx: Ctx): Router {
   const r = Router();
@@ -46,6 +47,7 @@ export function applicationRoutes(ctx: Ctx): Router {
       const a = auth(req);
       const files = (req.files as Express.Multer.File[] | undefined) ?? [];
       if (!files.length) throw new AppError(400, 'no_files', 'Vyberte aspoň jeden soubor.');
+      assertCanUseAi(db, ctx.config, a.orgId);
       const provider = a.me.organization.isDemo ? ctx.providers.forOrg(true) : null;
       // Ukázková organizace: jen ukázkové soubory (bez poskytovatele nic)
       const accept = a.me.organization.isDemo ? (sha: string) => provider?.acceptsDocument?.(sha) ?? false : undefined;
@@ -58,6 +60,7 @@ export function applicationRoutes(ctx: Ctx): Router {
   r.post('/jobs/:id/applications/reevaluate', (req, res) => {
     const a = auth(req);
     const job = getJobRow(db, a.orgId, String(req.params.id));
+    assertCanUseAi(db, ctx.config, a.orgId);
     const body = parse(z.object({ ids: z.array(z.string().max(64)).max(500).optional(), staleOnly: z.boolean().optional() }), req.body);
     let ids: string[];
     if (body.ids?.length) {
@@ -103,6 +106,7 @@ export function applicationRoutes(ctx: Ctx): Router {
     const a = auth(req);
     const app = getApplicationRow(db, a.orgId, String(req.params.id));
     if (app.status !== 'failed') throw new AppError(409, 'not_failed', 'Zpracování neskončilo chybou.');
+    assertCanUseAi(db, ctx.config, a.orgId);
     if (app.error_code === 'unsupported') throw new AppError(409, 'unsupported', 'Tento soubor nejde zpracovat ani napodruhé.');
     requeue(db, app.id);
     audit(db, { orgId: a.orgId, actorId: a.userId, action: 'application.retry', entityType: 'application', entityId: app.id, jobId: app.job_id, meta: { applicationId: app.id } });
@@ -115,6 +119,7 @@ export function applicationRoutes(ctx: Ctx): Router {
     const app = getApplicationRow(db, a.orgId, String(req.params.id));
     const job = getJobRow(db, a.orgId, app.job_id);
     if (job.status !== 'active') throw new AppError(409, 'job_not_active', 'Hodnotit lze jen v aktivní pozici.');
+    assertCanUseAi(db, ctx.config, a.orgId);
     if (!requeue(db, app.id)) throw new AppError(409, 'processing', 'Životopis se právě zpracovává.');
     audit(db, { orgId: a.orgId, actorId: a.userId, action: 'application.reevaluate', entityType: 'application', entityId: app.id, jobId: app.job_id, meta: { applicationId: app.id } });
     queue.kick();

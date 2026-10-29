@@ -19,6 +19,7 @@ Vychází z `docs/audit.md`. Pořadí podle priorit ze zadání.
 | 13 | Testy | unit, API (vč. izolace organizací), E2E v prohlížeči, typy, lint, build | hotovo |
 | 14 | Demo | `npm run seed:demo`, demo organizace se zřetelným označením | hotovo |
 | 15 | Aplikace (PWA) | manifest, ikony, service worker s offline stránkou, tlačítko instalace | hotovo |
+| 17 | Placené členství | tarify podle CV/měsíc, objednávka a fakturační údaje, Správa pro provozovatele, blokace AI bez předplatného | hotovo |
 | 16 | Online provoz | `node:sqlite` místo nativního modulu, Dockerfile, `render.yaml`, registrační kód, `docs/nasazeni.md` | hotovo, nasazení čeká na účty |
 
 Skutečný výsledek testů je v závěrečné zprávě a v `README.md`.

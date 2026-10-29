@@ -10,9 +10,11 @@ import { useToast } from '../components/toast';
 import { Badge, Button, ErrorState, Field, IconButton, Input, Notice, Select, Spinner } from '../components/ui';
 import { fmtDate, useDocumentTitle } from '../hooks';
 import { NotFoundPage } from './NotFound';
+import { SubscriptionSettings } from './Subscription';
 
 export function SettingsPage({ me }: { me: Me }) {
   useDocumentTitle('Nastavení');
+  const billingVisible = me.organization.subscription.enabled && !me.organization.isDemo;
   return (
     <div className="page">
       <div className="page-head"><div className="page-head-text"><h1 className="page-title">Nastavení</h1></div></div>
@@ -21,12 +23,14 @@ export function SettingsPage({ me }: { me: Me }) {
           <NavLink to="/nastaveni" end className="nav-item">Profil</NavLink>
           <NavLink to="/nastaveni/organizace" className="nav-item">Organizace</NavLink>
           <NavLink to="/nastaveni/tym" className="nav-item">Tým</NavLink>
+          {billingVisible && <NavLink to="/nastaveni/predplatne" className="nav-item">Předplatné</NavLink>}
           <NavLink to="/nastaveni/zpracovani" className="nav-item">Zpracování a data</NavLink>
         </nav>
         <Routes>
           <Route index element={<Profile me={me} />} />
           <Route path="organizace" element={<Organization me={me} />} />
           <Route path="tym" element={<Team me={me} />} />
+          {billingVisible && <Route path="predplatne" element={<SubscriptionSettings me={me} />} />}
           <Route path="zpracovani" element={<Processing me={me} />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
@@ -226,7 +230,7 @@ function Processing({ me }: { me: Me }) {
               <dt>Formáty</dt><dd>{u.supportedFormats.join(', ')}</dd>
               <dt>Max. velikost</dt><dd>{u.maxFileMb} MB na soubor</dd>
             </dl>
-            <p className="small muted">Text se z PDF a DOCX čte přímo. Model AI se použije jen na hodnocení a u naskenovaných dokumentů nebo fotek i na přepis textu. Model, limit a klíč nastavuje správce serveru v proměnných prostředí.</p>
+            <p className="small muted">Text se z PDF a DOCX čte přímo. Model AI se použije jen na hodnocení a u naskenovaných dokumentů nebo fotek i na přepis textu. {me.organization.subscription.enabled ? 'Měsíční limit určuje váš tarif (Nastavení → Předplatné).' : 'Model, limit a klíč nastavuje správce serveru v proměnných prostředí.'}</p>
           </>
         )}
       </section>

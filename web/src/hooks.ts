@@ -52,6 +52,15 @@ export function fmtRelative(iso: string): string {
   return fmtDate(iso);
 }
 
+/** Datum RRRR-MM-DD (bez času, např. konec předplatného) česky: 15. 11. 2026 */
+export const fmtDay = (ymd: string): string => {
+  const [y, m, d] = ymd.split('-').map(Number);
+  return `${d}. ${m}. ${y}`;
+};
+
+const czk = new Intl.NumberFormat('cs-CZ', { maximumFractionDigits: 0 });
+export const fmtCzk = (n: number): string => `${czk.format(n)} Kč`;
+
 export const plural = (n: number, one: string, few: string, many: string): string =>
   `${n} ${n === 1 ? one : n >= 2 && n <= 4 ? few : many}`;
 

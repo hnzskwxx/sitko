@@ -45,6 +45,9 @@ npm start                     # servíruje API i sestavený frontend
 | `PUBLIC_URL` | `RENDER_EXTERNAL_URL` | veřejná adresa (odkazy pozvánek, kontrola Origin) |
 | `ALLOW_REGISTRATION` | `true` | registrace nových firem |
 | `REGISTRATION_CODE` | – | když je vyplněný, registrace firmy vyžaduje tento kód |
+| `SUBSCRIPTIONS` | `false` | placené členství: AI jen pro firmy s aktivním tarifem |
+| `ADMIN_EMAILS` | – | e-maily provozovatelů (čárkou), vidí Správu firem a tarifů |
+| `BILLING_CONTACT` | – | kontakt, který firmy vidí u předplatného |
 | `SEED_DEMO_ON_START` | `false` | při startu připravit ukázku (`demo@sitko.local`); přihlašovací stránka pak nabídne „Otevřít ukázku“ |
 | `SESSION_DAYS` | 14 | platnost přihlášení |
 | `COOKIE_SECURE` | v produkci `true` | cookie jen přes HTTPS |
@@ -53,7 +56,7 @@ npm start                     # servíruje API i sestavený frontend
 ## Kontroly
 
 ```bash
-npm test             # unit + API testy (Vitest + Supertest), 39 testů
+npm test             # unit + API testy (Vitest + Supertest), 45 testů
 npm run typecheck    # TypeScript server i web
 npm run lint         # ESLint
 npm run build        # produkční sestavení

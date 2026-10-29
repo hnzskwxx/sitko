@@ -2,8 +2,10 @@ import express, { type Express, Router } from 'express';
 import { csrfGuard, requireAuth, sessionLoader } from './auth.js';
 import type { Ctx } from './context.js';
 import { AppError, errorHandler } from './lib/errors.js';
+import { adminRoutes } from './routes/admin.js';
 import { applicationRoutes } from './routes/applications.js';
 import { authRoutes } from './routes/auth.js';
+import { billingRoutes } from './routes/billing.js';
 import { jobRoutes } from './routes/jobs.js';
 import { orgRoutes } from './routes/org.js';
 
@@ -37,6 +39,8 @@ export function createApp(ctx: Ctx, opts: { csp?: boolean } = {}): Express {
   api.use(authRoutes(ctx));
   api.use(requireAuth);
   api.use(orgRoutes(ctx));
+  api.use(billingRoutes(ctx));
+  api.use(adminRoutes(ctx));
   api.use(jobRoutes(ctx));
   api.use(applicationRoutes(ctx));
   api.use((_req, _res, next) => next(new AppError(404, 'not_found', 'Tento endpoint neexistuje.')));

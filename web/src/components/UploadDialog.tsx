@@ -1,18 +1,23 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { FileUp } from 'lucide-react';
 import { useRef, useState } from 'react';
+import { Link } from 'react-router';
 import type { UploadResult } from '@shared/types';
 import { errorMessage, upload } from '../api';
 import { plural } from '../hooks';
 import { Dialog } from './overlay';
-import { Badge, Button } from './ui';
+import { Badge, Button, Notice } from './ui';
 
 const ACCEPT = '.pdf,.docx,.txt,.jpg,.jpeg,.png';
 const ALLOWED = /\.(pdf|docx|txt|jpe?g|png)$/i;
 
 interface Row { fileName: string; outcome: UploadResult['outcome'] | 'uploading' | 'error'; message: string | null }
 
-export function UploadDialog({ jobId, open, onOpenChange, maxFileMb = 10 }: { jobId: string; open: boolean; onOpenChange: (o: boolean) => void; maxFileMb?: number }) {
+export function UploadDialog({ jobId, open, onOpenChange, maxFileMb = 10, blocked = false }: {
+  jobId: string; open: boolean; onOpenChange: (o: boolean) => void; maxFileMb?: number;
+  /** Firma nemá aktivní předplatné: místo nahrávání vysvětlení (server by soubory stejně odmítl). */
+  blocked?: boolean;
+}) {
   const [rows, setRows] = useState<Row[]>([]);
   const [progress, setProgress] = useState<number | null>(null);
   const [over, setOver] = useState(false);
@@ -57,6 +62,11 @@ export function UploadDialog({ jobId, open, onOpenChange, maxFileMb = 10 }: { jo
       description={`PDF, DOCX, TXT nebo fotka životopisu (JPG, PNG), nejvýš ${maxFileMb} MB na soubor. Zpracování běží na pozadí, dialog můžete zavřít.`}
       footer={<Button variant="primary" onClick={() => { onOpenChange(false); setRows([]); }} disabled={busy}>Hotovo</Button>}
     >
+      {blocked ? (
+        <Notice tone="warning" action={<Link className="btn btn-secondary btn-sm" to="/nastaveni/predplatne" onClick={() => onOpenChange(false)}>Předplatné</Link>}>
+          Hodnocení životopisů je vypnuté, protože předplatné není aktivní. Soubory nahrajete po aktivaci tarifu.
+        </Notice>
+      ) : (
       <label
         className={`drop${over ? ' is-over' : ''}`}
         onDragOver={(e) => { e.preventDefault(); setOver(true); }}
@@ -71,6 +81,7 @@ export function UploadDialog({ jobId, open, onOpenChange, maxFileMb = 10 }: { jo
         <strong>Přetáhněte soubory sem</strong>
         <span className="small muted">nebo klikněte a vyberte je z počítače</span>
       </label>
+      )}
 
       {busy && (
         <div className="stack-sm" style={{ marginTop: 12 }} role="status">

@@ -75,6 +75,18 @@ kbd {
   font-size: var(--fs-sm); border-bottom: 1px solid var(--border);
 }
 .banner-demo { background: var(--warning-bg); color: var(--warning); }
+.banner-warning { background: var(--warning-bg); color: var(--warning); }
+.banner-info { background: var(--info-bg); color: var(--info); }
+.banner-link { margin-left: auto; color: inherit; font-weight: 600; white-space: nowrap; }
+
+/* ---------- Předplatné ---------- */
+.plan-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: var(--s-3); }
+.plan-card { display: grid; gap: var(--s-2); align-content: start; padding: var(--s-4); border: 1px solid var(--border); border-radius: var(--r-panel); background: var(--surface); }
+.plan-card-current { border-color: var(--success); }
+.segmented-count { display: inline-grid; place-items: center; min-width: 18px; height: 18px; margin-left: 6px; padding: 0 5px; border-radius: 9px; background: var(--info); color: var(--surface); font-size: 11px; font-weight: 600; }
+.plan-name { font-size: var(--fs-lg, 16px); font-weight: 600; }
+.plan-limit { font-size: var(--fs-sm); color: var(--text-2); }
+.plan-price { font-size: var(--fs-lg, 16px); font-weight: 600; font-variant-numeric: tabular-nums; margin-bottom: var(--s-1); }
 .banner svg { width: 16px; height: 16px; flex: none; }
 
 .page { width: 100%; max-width: 1280px; margin: 0 auto; padding: var(--s-6) var(--s-8) var(--s-12); }

@@ -39,13 +39,34 @@ Ceny se mění, ověřte je na [render.com/pricing](https://render.com/pricing).
 
 1. **Kód na GitHubu** v soukromém repozitáři. Soubor `.env` se nenahrává (je v `.gitignore`), klíče patří jen do nastavení na Renderu.
 2. **Render → New → Blueprint** → vyberte repozitář a do pole **Blueprint Path** napište `render-produkce.yaml`. Render ukáže službu `sitko` s diskem `sitko-data`. Plán je placený, platbu zadáváte sami.
-3. Render se zeptá na dvě tajné hodnoty:
+3. Render se zeptá na tři hodnoty:
    - `ANTHROPIC_API_KEY`: klíč z platform.claude.com. Doporučuji si tam nastavit měsíční limit útraty.
-   - `REGISTRATION_CODE`: dlouhý náhodný kód. Registrace nové firmy bez něj neprojde. Dáváte ho jen zákazníkům, kteří mají Sítko používat. Bez kódu by si účet mohl založit kdokoli a hodnotit na váš klíč.
+   - `ADMIN_EMAILS`: váš e-mail, se kterým se v Sítku zaregistrujete. Uvidíte pak **Správu**.
+   - `BILLING_CONTACT`: kontakt, který firmy uvidí u předplatného (e-mail, telefon).
 4. **Apply.** Render sestaví Docker image (pár minut) a spustí službu. Hotovo je, když `https://<služba>.onrender.com/api/v1/health` vrátí `{"data":{"ok":true}}`.
-5. Otevřete adresu služby a zaregistrujte svou firmu (s kódem z kroku 3).
+5. Zaregistrujte svou firmu pod e-mailem z `ADMIN_EMAILS`. V levém menu se objeví **Správa**.
+6. Ve Správě → **Tarify** doplňte ceny (Start 100 CV a Firma 500 CV jsou připravené bez ceny, můžete je upravit nebo přidat další).
+7. Pokud chcete Sítko používat i sami, aktivujte si ve Správě vlastní firmu stejně jako zákazníkovi.
 
 Veřejnou adresu Sítko zjistí samo z proměnné `RENDER_EXTERNAL_URL`. `PUBLIC_URL` nastavte, jen když připojíte vlastní doménu (např. `https://sitko.vasefirma.cz`).
+
+## Placené členství: jak to běží
+
+Ostrý provoz má zapnuté `SUBSCRIPTIONS=true`. Firma se zaregistruje sama a může si připravit pozice a požadavky. Hodnocení životopisů a návrhy z inzerátu (cokoli, co stojí peníze za AI) se zapnou až po aktivaci.
+
+1. **Firma objedná tarif:** Nastavení → Předplatné → vyplní fakturační údaje → Objednat.
+2. **Vy to uvidíte ve Správě:** filtr „Objednávky“ s počtem, objednávka je v seznamu nahoře. Otevřete firmu a tlačítkem **Kopírovat** si vezmete fakturační údaje.
+3. **Vystavíte fakturu** ve svém fakturačním programu (Fakturoid, iDoklad…) a pošlete ji na e-mail firmy. Sítko faktury nevystavuje ani neposílá.
+4. **Po zaplacení** otevřete firmu ve Správě, tarif už je předvyplněný, kliknete **1 měsíc** (nebo 3 / 12) a **Uložit**. Firma může hned hodnotit a objednávka zmizí.
+5. **Prodloužení:** firma klikne „Prodloužit“ (vznikne nová objednávka), nebo jí rovnou pošlete další fakturu a po zaplacení přidáte měsíc. Tlačítka prodlužují od konce stávajícího předplatného.
+
+Co se děje automaticky:
+
+- Týden před koncem vidí firma upozornění. Po posledním zaplaceném dni se hodnocení zastaví, data jí zůstanou.
+- Limit tarifu platí za kalendářní měsíc. Po vyčerpání se další životopisy nezpracují a firma uvidí, ať objedná vyšší tarif.
+- Správa nevidí kandidáty ani životopisy firem, jen firmu, tarif, fakturační údaje a počty.
+
+Sítko zatím neposílá e-maily: o nové objednávce se dozvíte ve Správě, firmě fakturu posíláte vy.
 
 ## Aktualizace
 
